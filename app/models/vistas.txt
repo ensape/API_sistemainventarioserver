@@ -1,0 +1,29 @@
+SELECT * FROM db_sistemainventario.tb_flejes;
+
+
+/* Consulta de detalle de flejes por bobina*/
+
+SELECT b.cuerpobobina as ClaveBobina, f.cuerpofleje as ClaveFleje, b.colada as ColadaBobina
+FROM tb_bobinas b 
+JOIN tb_flejes f ON f.bobinaID = b.id;
+
+
+/* Consulta de total de flejes por bobina*/
+
+SELECT b.cuerpobobina as ClaveBobina, COUNT(f.cuerpofleje) as TotalFlejes
+FROM tb_bobinas b 
+JOIN tb_flejes f ON f.bobinaID = b.id
+GROUP BY b.cuerpobobina
+ORDER BY b.fechaingreso desc;
+
+/* Consulta de la vista de total de flejes por bobina*/
+SELECT * from vw_total_flejes_por_bobina;
+
+
+/* Calcula el resto de la bobina*/
+SELECT b.cuerpobobina as ClaveBobina, b.pesoNeto,
+pesoNeto   - (SELECT SUM(f.pesoNeto)  FROM tb_flejes as f WHERE f.bobinaid = b.id) as KilogramosRestanteBobina
+FROM tb_bobinas as b;
+
+
+
